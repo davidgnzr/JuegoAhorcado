@@ -13,8 +13,6 @@ public class JugadorAhorcado {
 		// TODO Auto-generated method stub
 		try (
 				Socket s = new Socket("localhost", 7300);
-				//BufferedReader inSocket = new BufferedReader
-						 //(new InputStreamReader(s.getInputStream()));
 				DataInputStream dis =  new DataInputStream(s.getInputStream());
 				DataOutputStream dos =  new DataOutputStream(s.getOutputStream());
 				){
