@@ -27,6 +27,17 @@ public class AdivinadorAhorcado {
 			String letra = teclado.readLine();
 			dos.writeBytes(letra+"\r\n");
 			
+			String esta=dis.readLine();
+			if (esta.equalsIgnoreCase(palabraAdivinar)){
+				System.out.println("INCORRECTO. La letra no esta contenida. ");
+				System.out.println(palabraAdivinar);
+			}
+			else {
+				System.out.println("CORRECTO. La letra esta contenida. ");
+				palabraAdivinar=esta;
+				System.out.println(palabraAdivinar);
+			}
+			
 		}catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

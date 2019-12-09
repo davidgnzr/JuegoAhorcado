@@ -49,6 +49,25 @@ public class PartidaAhorcado implements Runnable {
 			
 			String letra=dis1.readLine();
 			dos2.writeBytes(letra+"\r\n");
+			boolean completado=false;
+			boolean ahorcado=false;
+			int intentos=7;
+			String acertado="";
+			
+			acertado=dis2.readLine();
+			if(acertado.equalsIgnoreCase("NO")) {
+				intentos--;
+			}
+			
+			if(intentos==0) {
+				ahorcado=true;
+				dos2.writeBytes("Enhorabuena!! Has ganado."+"\r\n");
+				dos1.writeBytes("Has perdido, no has conseguido adivinar la palabra."+"\r\n");
+			}
+			else {
+				palabraEncrip=dis2.readLine();
+				dos1.writeBytes(palabraEncrip+"\r\n");
+			}
 			
 		}catch (IOException e) {
 			e.printStackTrace();
