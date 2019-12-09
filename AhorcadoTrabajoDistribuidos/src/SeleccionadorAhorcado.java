@@ -24,45 +24,54 @@ public class SeleccionadorAhorcado {
 				for(int i=0;i<numLetras;i++) {
 					palabraEncrip=palabraEncrip+"_ ";
 				}
-				System.out.println(palabraEncrip);
 				dos.writeBytes(palabraEncrip+"\r\n");
 				String letra;
 				int letrasRestantes=numLetras;
 				String antigPalabraEncrip=palabraEncrip;
-				
-				while(letrasRestantes>0) {
+				boolean terminado =false;
+				while(!terminado) {
 					palabraEncrip="";
-					letra=dis.readLine();		
+					letra=dis.readLine();
+					System.out.println(letra);
 					System.out.println("¿La palabra contiene la letra: "+letra+" ? [SI/NO]");
-					String sn = teclado.readLine();
-					if (sn.equalsIgnoreCase("SI")) {
-						int i=0;
-						int indexl=0;			
-						while(i<numLetras) {
-							indexl=palabra.indexOf(letra, i);
-							if (indexl==i) {
-								palabraEncrip=palabraEncrip+letra+" ";
-								letrasRestantes--;
-							}else {
-								String letraAntigua= Character.toString(antigPalabraEncrip.charAt(i*2));
-								palabraEncrip=palabraEncrip+letraAntigua+" ";
+					boolean nocoincide=true;
+					while(nocoincide) {
+						String sn = teclado.readLine();
+						if (sn.equalsIgnoreCase("SI")) {
+							int i=0;
+							int indexl=0;			
+							while(i<numLetras) {
+								indexl=palabra.indexOf(letra, i);
+								if (indexl==i) {
+									palabraEncrip=palabraEncrip+letra+" ";
+									letrasRestantes--;
+								}else {
+									String letraAntigua= Character.toString(antigPalabraEncrip.charAt(i*2));
+									palabraEncrip=palabraEncrip+letraAntigua+" ";
+								}
+								i++;										
 							}
-							i++;										
-						}
-						dos.writeBytes("SI"+"\r\n");
-						dos.writeBytes(palabraEncrip+"\r\n");
-						antigPalabraEncrip=palabraEncrip;
+							dos.writeBytes("SI"+"\r\n");
+							dos.writeBytes(palabraEncrip+"\r\n");
+							antigPalabraEncrip=palabraEncrip;
+							nocoincide=false;
 					
-					}else if (sn.equalsIgnoreCase("NO")) {
-						dos.writeBytes("NO"+"\r\n");
-						dos.writeBytes(antigPalabraEncrip+"\r\n");
-					}else {
-						System.out.println("Lo respondido no coincide.");
+						}else if (sn.equalsIgnoreCase("NO")) {
+							dos.writeBytes("NO"+"\r\n");
+							dos.writeBytes(antigPalabraEncrip+"\r\n");
+							nocoincide=false;
+						}else {
+							System.out.println("Lo respondido no coincide. Vuelve a introducir");
+							nocoincide=true;
+						}
+					}
+					String end=dis.readLine();
+					if (end.equalsIgnoreCase("END")) {
+						String fin=dis.readLine();
+						System.out.println(fin);
+						terminado=true;
 					}
 				}
-				
-				String end=dis.readLine();	
-				System.out.println(end);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

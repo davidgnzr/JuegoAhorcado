@@ -3,6 +3,7 @@ import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -46,33 +47,44 @@ public class PartidaAhorcado implements Runnable {
 			
 			String palabraEncrip=dis2.readLine();
 			dos1.writeBytes(palabraEncrip+"\r\n");
-			boolean completado=false;
-			boolean ahorcado=false;
+			boolean finalizado=false;
 			int intentos=7;
 			String acertado="";
-			while(!completado || !ahorcado) {
+			while(!finalizado) {
 				
 				String letra=dis1.readLine();
 				dos2.writeBytes(letra+"\r\n");
-			
 				acertado=dis2.readLine();
 				if(acertado.equalsIgnoreCase("NO")) {
 					intentos--;
+					System.out.println("Intentos restantes: "+intentos);
 				}
 			
 				if(intentos==0) {
-					ahorcado=true;
+					finalizado=true;
+					dos2.writeBytes("END"+"\r\n");
+					dos1.writeBytes("END"+"\r\n");
 					dos2.writeBytes("Enhorabuena!! Has ganado."+"\r\n");
 					dos1.writeBytes("Has perdido, no has conseguido adivinar la palabra."+"\r\n");
 				}
 				else {
 					palabraEncrip=dis2.readLine();
-					dos1.writeBytes(palabraEncrip+"\r\n");
 					int lRestantes= palabraEncrip.indexOf("_");
 					if (lRestantes==-1) {
-						completado=true;
+						finalizado=true;
+						dos2.writeBytes("END"+"\r\n");
+						dos1.writeBytes("END"+"\r\n");
 						dos2.writeBytes("Has perdido, el otro jugador ha acertado la palabra."+"\r\n");
 						dos1.writeBytes("Enhorabuena!! Has ganado."+"\r\n");
+					}else {
+						dos1.writeBytes(palabraEncrip+"\r\n");
+						dos2.writeBytes("OK"+"\r\n");
+						if(acertado.equalsIgnoreCase("NO")) {
+							//File f=new File("C:\\Users\\David\\Desktop\\Carrera\\4º Carrera\\Sistemas Distribuidos\\Fotos Ahorcado\\fallo0.png");
+							
+							//dos1.writeBytes(f.toString());
+							
+						}
 					}
 				}
 			}
