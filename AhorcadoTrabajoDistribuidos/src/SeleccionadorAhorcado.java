@@ -29,35 +29,36 @@ public class SeleccionadorAhorcado {
 				String letra;
 				int letrasRestantes=numLetras;
 				String antigPalabraEncrip=palabraEncrip;
-				palabraEncrip="";
-				letra=dis.readLine();		
-				System.out.println("¿La palabra contiene la letra: "+letra+" ? [SI/NO]");
-				String sn = teclado.readLine();
-				if (sn.equalsIgnoreCase("SI")) {
-					int i=0;
-					int indexl=0;			
-					while(i<numLetras) {
-						indexl=palabra.indexOf(letra, i);
-						if (indexl==i) {
-							palabraEncrip=palabraEncrip+letra+" ";
-							letrasRestantes--;
-						}else {
-							String letraAntigua= Character.toString(antigPalabraEncrip.charAt(i*2));
-							palabraEncrip=palabraEncrip+letraAntigua+" ";
+				while(letrasRestantes>0) {
+					palabraEncrip="";
+					letra=dis.readLine();		
+					System.out.println("¿La palabra contiene la letra: "+letra+" ? [SI/NO]");
+					String sn = teclado.readLine();
+					if (sn.equalsIgnoreCase("SI")) {
+						int i=0;
+						int indexl=0;			
+						while(i<numLetras) {
+							indexl=palabra.indexOf(letra, i);
+							if (indexl==i) {
+								palabraEncrip=palabraEncrip+letra+" ";
+								letrasRestantes--;
+							}else {
+								String letraAntigua= Character.toString(antigPalabraEncrip.charAt(i*2));
+								palabraEncrip=palabraEncrip+letraAntigua+" ";
+							}
+							i++;										
 						}
-						i++;										
-					}
-					dos.writeBytes("SI"+"\r\n");
-					dos.writeBytes(palabraEncrip+"\r\n");
-					antigPalabraEncrip=palabraEncrip;
+						dos.writeBytes("SI"+"\r\n");
+						dos.writeBytes(palabraEncrip+"\r\n");
+						antigPalabraEncrip=palabraEncrip;
 					
-				}else if (sn.equalsIgnoreCase("NO")) {
-					dos.writeBytes("NO"+"\r\n");
-					dos.writeBytes(antigPalabraEncrip+"\r\n");
-				}else {
-					System.out.println("Lo respondido no coincide.");
+					}else if (sn.equalsIgnoreCase("NO")) {
+						dos.writeBytes("NO"+"\r\n");
+						dos.writeBytes(antigPalabraEncrip+"\r\n");
+					}else {
+						System.out.println("Lo respondido no coincide.");
+					}
 				}
-				
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

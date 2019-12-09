@@ -22,20 +22,27 @@ public class AdivinadorAhorcado {
 			String palabraAdivinar=dis.readLine();
 			System.out.println("Tu palabra a adivinar es: ");
 			System.out.println(palabraAdivinar);
+			boolean completado=false;
+			boolean ahorcado=false;
+			while(!completado || !ahorcado) {
+				System.out.println("Introduce letra a preguntar");
+				String letra = teclado.readLine();
+				dos.writeBytes(letra+"\r\n");
 			
-			System.out.println("Introduce letra a preguntar");
-			String letra = teclado.readLine();
-			dos.writeBytes(letra+"\r\n");
-			
-			String esta=dis.readLine();
-			if (esta.equalsIgnoreCase(palabraAdivinar)){
-				System.out.println("INCORRECTO. La letra no esta contenida. ");
-				System.out.println(palabraAdivinar);
-			}
-			else {
-				System.out.println("CORRECTO. La letra esta contenida. ");
-				palabraAdivinar=esta;
-				System.out.println(palabraAdivinar);
+				String esta=dis.readLine();
+				if (esta.equalsIgnoreCase(palabraAdivinar)){
+					System.out.println("INCORRECTO. La letra no esta contenida. ");
+					System.out.println(palabraAdivinar);
+				}
+				else {
+					System.out.println("CORRECTO. La letra esta contenida. ");
+					palabraAdivinar=esta;
+					System.out.println(palabraAdivinar);
+				}
+				int lRestantes= palabraAdivinar.indexOf("_");
+				if (lRestantes==-1) {
+					completado=true;
+				}
 			}
 			
 		}catch (IOException e) {

@@ -15,12 +15,11 @@ public class ServidorAhorcado{
 			ss= new ServerSocket(7776);
 			while(true)
 			{
-				try (Socket cliente1 = ss.accept();
-						Socket cliente2= ss.accept();){
-					PartidaAhorcado sa= new PartidaAhorcado(cliente1,cliente2);
-					pool.execute(sa);
-				}
-			}
+				Socket cliente1 = ss.accept();
+				Socket cliente2= ss.accept();
+				PartidaAhorcado sa= new PartidaAhorcado(cliente1,cliente2);
+				pool.execute(sa);
+			}	
 		} catch (IOException e) {
 			e.printStackTrace();
 		}finally {
