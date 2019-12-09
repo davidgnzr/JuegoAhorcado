@@ -26,6 +26,11 @@ public class SeleccionadorAhorcado {
 				}
 				System.out.println(palabraEncrip);
 				dos.writeBytes(palabraEncrip+"\r\n");
+				String letra;
+				letra=dis.readLine();		
+				System.out.println("¿La palabra contiene la letra: "+letra+" ? [SI/NO]");
+				String sn = teclado.readLine();
+				
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

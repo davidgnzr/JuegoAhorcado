@@ -47,6 +47,9 @@ public class PartidaAhorcado implements Runnable {
 			String palabraEncrip=dis2.readLine();
 			dos1.writeBytes(palabraEncrip+"\r\n");
 			
+			String letra=dis1.readLine();
+			dos2.writeBytes(letra+"\r\n");
+			
 		}catch (IOException e) {
 			e.printStackTrace();
 		}
