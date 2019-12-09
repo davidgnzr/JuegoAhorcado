@@ -29,6 +29,7 @@ public class SeleccionadorAhorcado {
 				String letra;
 				int letrasRestantes=numLetras;
 				String antigPalabraEncrip=palabraEncrip;
+				
 				while(letrasRestantes>0) {
 					palabraEncrip="";
 					letra=dis.readLine();		
@@ -59,6 +60,9 @@ public class SeleccionadorAhorcado {
 						System.out.println("Lo respondido no coincide.");
 					}
 				}
+				
+				String end=dis.readLine();	
+				System.out.println(end);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
