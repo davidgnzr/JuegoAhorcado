@@ -21,65 +21,60 @@ public class AdivinadorAhorcado extends JFrame{
 	private JLabel lPEncrip;
 	private JLabel lImg;
 	private JLabel lEstado;
+	private JLabel lCorrecto;
+	private JLabel lIntentosRestantes;
 	private String letraP;
+	private JPanel panelB;
+	private int intentos;
 	
 	public AdivinadorAhorcado(Socket s) {
 		this.s=s;
 		
 		//InterfazGráfica
 		interfazGraficaAdivinador();
-		
-
 	}
 	
 	public void comenzarJuego() {
 		
 		try (	BufferedReader teclado = new BufferedReader(new InputStreamReader(System.in));					
 				DataInputStream dis =  new DataInputStream(s.getInputStream());
+				DataOutputStream dos =  new DataOutputStream(s.getOutputStream());
 				){
 			// TODO Auto-generated method stub
 			String palabraAdivinar=dis.readLine();
-			System.out.println(palabraAdivinar);
 			setlPEncrip(palabraAdivinar);
-			setlEstado("");
-			
-			int intentoFoto=0;
+			crearBotones(dos);
+			int intentoFoto=1;
 			boolean terminado=false;
 			while(!terminado) {
-				System.out.println("Introduce letra a preguntar");
-//				letraP=teclado.readLine();
-				
+				setlEstado("Pulsa la letra a preguntar");				
 				String esta=dis.readLine();
 				if (esta.equalsIgnoreCase("END")) {
+					String Pfinal=dis.readLine();
 					String fin=dis.readLine();
-					System.out.println(fin);
+					String urlFoto="FotosAhorcado\\fallo"+intentoFoto+".png";
+					crearImagen(urlFoto);
+					setlPEncrip(Pfinal);
+					JOptionPane.showMessageDialog(this, fin);
+					panelB.setVisible(false);
 					terminado=true;
 				}
 				else if (esta.equalsIgnoreCase(palabraAdivinar)){
-					System.out.println("INCORRECTO. La letra no esta contenida. ");
-					System.out.println(palabraAdivinar);
-					String urlFotoG="ahorcado"+intentoFoto+".png";
-					System.out.println(urlFotoG);
-					String urlFoto="C:\\Users\\David\\Desktop\\Carrera\\4º Carrera\\Sistemas Distribuidos\\Fotos Ahorcado\\fallo"+intentoFoto+".png";
-					System.out.println(urlFoto);
-					try(FileOutputStream fout =new FileOutputStream(new File(urlFotoG));
-							FileInputStream f = new FileInputStream(urlFoto)){
-						byte [] buff = new byte[1024*32];
-						int leidos = f.read(buff);
-						while (leidos != -1) {
-							fout.write(buff, 0, leidos);
-							leidos = f.read(buff);
-						}
-						fout.flush();
-						intentoFoto++;
-					}
+					setlCorrecto("INCORRECTO. Letra no contenida.");
+					String urlFoto="FotosAhorcado\\fallo"+intentoFoto+".png";
+					crearImagen(urlFoto);
+					intentoFoto++;
+					intentos--;
+					updatelIntentosRestantes();				
+					panelB.setVisible(true);
 					
 				}				
 				else {
-					System.out.println("CORRECTO. La letra esta contenida. ");
+					setlCorrecto("CORRECTO!! Letra contenida.");
 					palabraAdivinar=esta;
-					System.out.println(palabraAdivinar);
-				}
+					setlPEncrip(palabraAdivinar);
+					panelB.setVisible(true);					
+				}			
 			}
 				
 			
@@ -97,13 +92,21 @@ public class AdivinadorAhorcado extends JFrame{
 		lEstado.setText(s);
 	}
 	
-	public void btnPulsado(ActionEvent e) {
+	public void updatelIntentosRestantes() {
+		lIntentosRestantes.setText("Intentos restantes: " + intentos);
+	}
+	public void setlCorrecto(String s) {
+		lCorrecto.setText(s);
+	}
+	
+	public void btnPulsado(ActionEvent e,DataOutputStream dos) {
 		JButton jbP= (JButton) e.getSource();
-		System.out.println(jbP.getText());
 		letraP=jbP.getText();
-		jbP.setEnabled(false);
-		try (	DataOutputStream dos =  new DataOutputStream(s.getOutputStream());){
+		try {
 			dos.writeBytes(letraP+"\r\n");
+			setlEstado("Esperando la respuesta del otro jugador...");
+			jbP.setEnabled(false);
+			panelB.setVisible(false);
 		} catch (IOException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
@@ -125,15 +128,7 @@ public class AdivinadorAhorcado extends JFrame{
 		lblIntroduceLetra.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		lblIntroduceLetra.setBounds(307, 26, 171, 30);
 		contentPane.add(lblIntroduceLetra);
-		
-		ImageIcon ip= new ImageIcon("C:\\Users\\David\\Desktop\\Carrera\\4º Carrera\\Sistemas Distribuidos\\Fotos Ahorcado\\fallo0.png");
-		lImg=new JLabel();
-		lImg.setBounds(40, 80, 120, 160);
-		ImageIcon iscalado= new ImageIcon(ip.getImage().getScaledInstance(lImg.getWidth(), lImg.getHeight(), Image.SCALE_DEFAULT));		
-		lImg.setIcon(iscalado);		
-		lImg.setVisible(true);
-		contentPane.add(lImg);
-		
+				
 		lPEncrip = new JLabel("");
 		lPEncrip.setHorizontalAlignment(SwingConstants.CENTER);
 		lPEncrip.setFont(new Font("Tahoma", Font.PLAIN, 20));
@@ -145,12 +140,44 @@ public class AdivinadorAhorcado extends JFrame{
 		lEstado.setBounds(226, 61, 338, 23);
 		contentPane.add(lEstado);
 		
+		panelB = new JPanel();
+		panelB.setBounds(212, 110, 371, 134);
+		contentPane.add(panelB);
+		
+		lImg=new JLabel();
+		lImg.setBounds(30, 40, 140, 200);	
+		lImg.setVisible(true);
+		contentPane.add(lImg);
+		crearImagen("FotosAhorcado\\fallo0.png");
+		
+		intentos=6;
+		lIntentosRestantes = new JLabel("Intentos restantes: " + intentos);
+		lIntentosRestantes.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		lIntentosRestantes.setBounds(40, 250, 128, 25);
+		contentPane.add(lIntentosRestantes);
+		
+		lCorrecto = new JLabel("");
+		lCorrecto.setHorizontalAlignment(SwingConstants.CENTER);
+		lCorrecto.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		lCorrecto.setBounds(212, 250, 361, 25);
+		contentPane.add(lCorrecto);
+		
+	}
+	
+	public void crearImagen(String ruta) {
+		ImageIcon ip= new ImageIcon(ruta);
+		ImageIcon iscalado= new ImageIcon(ip.getImage().getScaledInstance(lImg.getWidth(), lImg.getHeight(), Image.SCALE_DEFAULT));		
+		lImg.setIcon(iscalado);	
+	}
+	
+	public void crearBotones(DataOutputStream dos) {
+		
 		JButton btnA = new JButton("A");
 		btnA.setBounds(226, 122, 45, 23);
 		contentPane.add(btnA);
 		btnA.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				btnPulsado(e);
+				btnPulsado(e,dos);
 			}
 		});
 		
@@ -159,16 +186,17 @@ public class AdivinadorAhorcado extends JFrame{
 		contentPane.add(btnB);
 		btnB.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				btnPulsado(e);
+				btnPulsado(e,dos);
 			}
 		});
+
 		
 		JButton btnC = new JButton("C");
 		btnC.setBounds(323, 122, 45, 23);
 		contentPane.add(btnC);
 		btnC.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				btnPulsado(e);
+				btnPulsado(e,dos);
 			}
 		});
 		
@@ -177,7 +205,7 @@ public class AdivinadorAhorcado extends JFrame{
 		contentPane.add(btnD);
 		btnD.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				btnPulsado(e);
+				btnPulsado(e,dos);
 			}
 		});
 		
@@ -186,7 +214,7 @@ public class AdivinadorAhorcado extends JFrame{
 		contentPane.add(btnE);
 		btnE.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				btnPulsado(e);
+				btnPulsado(e,dos);
 			}
 		});
 		
@@ -195,7 +223,7 @@ public class AdivinadorAhorcado extends JFrame{
 		contentPane.add(btnF);
 		btnF.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				btnPulsado(e);
+				btnPulsado(e,dos);
 			}
 		});
 		
@@ -204,7 +232,7 @@ public class AdivinadorAhorcado extends JFrame{
 		contentPane.add(btnG);
 		btnG.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				btnPulsado(e);
+				btnPulsado(e,dos);
 			}
 		});
 		
@@ -213,7 +241,7 @@ public class AdivinadorAhorcado extends JFrame{
 		contentPane.add(btnN);
 		btnN.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				btnPulsado(e);
+				btnPulsado(e,dos);
 			}
 		});
 		
@@ -222,7 +250,7 @@ public class AdivinadorAhorcado extends JFrame{
 		contentPane.add(btnM);
 		btnM.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				btnPulsado(e);
+				btnPulsado(e,dos);
 			}
 		});
 		
@@ -231,7 +259,7 @@ public class AdivinadorAhorcado extends JFrame{
 		contentPane.add(btnL);
 		btnL.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				btnPulsado(e);
+				btnPulsado(e,dos);
 			}
 		});
 		
@@ -240,7 +268,7 @@ public class AdivinadorAhorcado extends JFrame{
 		contentPane.add(btnK);
 		btnK.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				btnPulsado(e);
+				btnPulsado(e,dos);
 			}
 		});
 		
@@ -249,7 +277,7 @@ public class AdivinadorAhorcado extends JFrame{
 		contentPane.add(btnJ);
 		btnJ.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				btnPulsado(e);
+				btnPulsado(e,dos);
 			}
 		});
 		
@@ -258,7 +286,7 @@ public class AdivinadorAhorcado extends JFrame{
 		contentPane.add(btnI);
 		btnI.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				btnPulsado(e);
+				btnPulsado(e,dos);
 			}
 		});
 		
@@ -267,7 +295,7 @@ public class AdivinadorAhorcado extends JFrame{
 		contentPane.add(btnH);
 		btnH.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				btnPulsado(e);
+				btnPulsado(e,dos);
 			}
 		});
 		
@@ -276,7 +304,7 @@ public class AdivinadorAhorcado extends JFrame{
 		contentPane.add(btnU);
 		btnU.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				btnPulsado(e);
+				btnPulsado(e,dos);
 			}
 		});
 		
@@ -285,7 +313,7 @@ public class AdivinadorAhorcado extends JFrame{
 		contentPane.add(btnT);
 		btnT.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				btnPulsado(e);
+				btnPulsado(e,dos);
 			}
 		});
 		
@@ -294,7 +322,7 @@ public class AdivinadorAhorcado extends JFrame{
 		contentPane.add(btnS);
 		btnS.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				btnPulsado(e);
+				btnPulsado(e,dos);
 			}
 		});
 		
@@ -303,7 +331,7 @@ public class AdivinadorAhorcado extends JFrame{
 		contentPane.add(btnR);
 		btnR.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				btnPulsado(e);
+				btnPulsado(e,dos);
 			}
 		});
 		
@@ -312,7 +340,7 @@ public class AdivinadorAhorcado extends JFrame{
 		contentPane.add(btnQ);
 		btnQ.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				btnPulsado(e);
+				btnPulsado(e,dos);
 			}
 		});
 		
@@ -321,7 +349,7 @@ public class AdivinadorAhorcado extends JFrame{
 		contentPane.add(btnP);
 		btnP.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				btnPulsado(e);
+				btnPulsado(e,dos);
 			}
 		});
 		
@@ -330,7 +358,7 @@ public class AdivinadorAhorcado extends JFrame{
 		contentPane.add(btnO);
 		btnO.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				btnPulsado(e);
+				btnPulsado(e,dos);
 			}
 		});
 		
@@ -339,7 +367,7 @@ public class AdivinadorAhorcado extends JFrame{
 		contentPane.add(btnZ);
 		btnZ.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				btnPulsado(e);
+				btnPulsado(e,dos);
 			}
 		});
 		
@@ -348,7 +376,7 @@ public class AdivinadorAhorcado extends JFrame{
 		contentPane.add(btnY);
 		btnY.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				btnPulsado(e);
+				btnPulsado(e,dos);
 			}
 		});
 		
@@ -357,7 +385,7 @@ public class AdivinadorAhorcado extends JFrame{
 		contentPane.add(btnX);
 		btnX.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				btnPulsado(e);
+				btnPulsado(e,dos);
 			}
 		});
 	
@@ -366,7 +394,7 @@ public class AdivinadorAhorcado extends JFrame{
 		contentPane.add(btnW);
 		btnW.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				btnPulsado(e);
+				btnPulsado(e,dos);
 			}
 		});
 		
@@ -375,7 +403,7 @@ public class AdivinadorAhorcado extends JFrame{
 		contentPane.add(btnV);
 		btnV.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				btnPulsado(e);
+				btnPulsado(e,dos);
 			}
 		});
 		
@@ -384,9 +412,37 @@ public class AdivinadorAhorcado extends JFrame{
 		contentPane.add(btnNEsp);
 		btnNEsp.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				btnPulsado(e);
+				btnPulsado(e,dos);
 			}
 		});
+		
+		panelB.add(btnA);	
+		panelB.add(btnB);
+		panelB.add(btnC);
+		panelB.add(btnD);
+		panelB.add(btnE);
+		panelB.add(btnF);
+		panelB.add(btnG);
+		panelB.add(btnH);
+		panelB.add(btnI);
+		panelB.add(btnJ);
+		panelB.add(btnK);
+		panelB.add(btnL);
+		panelB.add(btnM);
+		panelB.add(btnN);
+		panelB.add(btnNEsp);
+		panelB.add(btnO);
+		panelB.add(btnP);
+		panelB.add(btnQ);
+		panelB.add(btnR);
+		panelB.add(btnS);
+		panelB.add(btnT);
+		panelB.add(btnU);
+		panelB.add(btnV);
+		panelB.add(btnW);
+		panelB.add(btnX);
+		panelB.add(btnY);
+		panelB.add(btnZ);
 		
 	}
 	

@@ -12,7 +12,7 @@ public class JugadorAhorcado {
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		try (
-				Socket s = new Socket("localhost", 7769);
+				Socket s = new Socket("localhost", 7768);
 				DataInputStream dis =  new DataInputStream(s.getInputStream());
 				DataOutputStream dos =  new DataOutputStream(s.getOutputStream());
 				){

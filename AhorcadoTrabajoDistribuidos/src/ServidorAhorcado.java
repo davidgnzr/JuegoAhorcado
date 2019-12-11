@@ -12,7 +12,7 @@ public class ServidorAhorcado{
 		ExecutorService pool =null;
 		try {
 			pool = Executors.newCachedThreadPool();
-			ss= new ServerSocket(7769);
+			ss= new ServerSocket(7768);
 			while(true)
 			{
 				Socket cliente1 = ss.accept();

@@ -52,11 +52,6 @@ public class InterfazAdivinador extends JFrame {
 		
 		JButton btnA = new JButton("A");
 		btnA.setEnabled(false);
-		btnA.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-
-			}
-		});
 		btnA.setBounds(226, 122, 45, 23);
 		contentPane.add(btnA);
 		
@@ -156,14 +151,6 @@ public class InterfazAdivinador extends JFrame {
 		btnW.setBounds(346, 224, 45, 23);
 		contentPane.add(btnW);
 		
-		JButton btnV = new JButton("V");
-		btnV.setBounds(298, 224, 45, 23);
-		contentPane.add(btnV);
-		
-		JButton btnNEsp = new JButton("\u00D1");
-		btnNEsp.setBounds(226, 190, 45, 23);
-		contentPane.add(btnNEsp);
-		
 		JLabel lPEncrip = new JLabel("_ _ _ _");
 		lPEncrip.setHorizontalAlignment(SwingConstants.CENTER);
 		lPEncrip.setFont(new Font("Tahoma", Font.PLAIN, 20));
@@ -174,5 +161,27 @@ public class InterfazAdivinador extends JFrame {
 		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		lblNewLabel.setBounds(226, 61, 338, 23);
 		contentPane.add(lblNewLabel);
+		
+		JPanel panel = new JPanel();
+		panel.setBounds(212, 110, 371, 184);
+		contentPane.add(panel);
+
+		
+		JButton btnNEsp = new JButton("\u00D1");
+		panel.add(btnNEsp);
+		
+		JButton btnV = new JButton("V");
+		panel.add(btnV);
+		
+		JLabel lblIntentosRestantes = new JLabel("Intentos restantes:");
+		lblIntentosRestantes.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		lblIntentosRestantes.setBounds(23, 312, 128, 25);
+		contentPane.add(lblIntentosRestantes);
+		
+		JLabel lblCorrecto = new JLabel("CORRECTO");
+		lblCorrecto.setHorizontalAlignment(SwingConstants.CENTER);
+		lblCorrecto.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		lblCorrecto.setBounds(212, 305, 361, 25);
+		contentPane.add(lblCorrecto);
 	}
 }

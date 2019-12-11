@@ -24,6 +24,7 @@ public class SeleccionadorAhorcado {
 				for(int i=0;i<numLetras;i++) {
 					palabraEncrip=palabraEncrip+"_ ";
 				}
+				dos.writeBytes(palabra+"\r\n");
 				dos.writeBytes(palabraEncrip+"\r\n");
 				String letra;
 				int letrasRestantes=numLetras;
