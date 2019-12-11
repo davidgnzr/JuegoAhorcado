@@ -8,6 +8,9 @@ import javax.swing.JLabel;
 import javax.swing.JTextField;
 import javax.swing.JButton;
 import java.awt.Font;
+import javax.swing.SwingConstants;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class InterfazAdivinador extends JFrame {
 
@@ -42,116 +45,134 @@ public class InterfazAdivinador extends JFrame {
 		contentPane.setLayout(null);
 		
 		JLabel lblIntroduceLetra = new JLabel("ADIVINE LA PALABRA");
+		lblIntroduceLetra.setHorizontalAlignment(SwingConstants.CENTER);
 		lblIntroduceLetra.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		lblIntroduceLetra.setBounds(317, 65, 171, 30);
+		lblIntroduceLetra.setBounds(307, 26, 171, 30);
 		contentPane.add(lblIntroduceLetra);
 		
 		JButton btnA = new JButton("A");
-		btnA.setBounds(225, 106, 45, 23);
+		btnA.setEnabled(false);
+		btnA.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+
+			}
+		});
+		btnA.setBounds(226, 122, 45, 23);
 		contentPane.add(btnA);
 		
 		JButton btnB = new JButton("B");
-		btnB.setBounds(274, 106, 45, 23);
+		btnB.setBounds(275, 122, 45, 23);
 		contentPane.add(btnB);
 		
 		JButton btnC = new JButton("C");
-		btnC.setBounds(322, 106, 45, 23);
+		btnC.setBounds(323, 122, 45, 23);
 		contentPane.add(btnC);
 		
 		JButton btnD = new JButton("D");
-		btnD.setBounds(371, 106, 45, 23);
+		btnD.setBounds(372, 122, 45, 23);
 		contentPane.add(btnD);
 		
 		JButton btnE = new JButton("E");
-		btnE.setBounds(420, 106, 45, 23);
+		btnE.setBounds(421, 122, 45, 23);
 		contentPane.add(btnE);
 		
 		JButton btnF = new JButton("F");
-		btnF.setBounds(469, 106, 45, 23);
+		btnF.setBounds(470, 122, 45, 23);
 		contentPane.add(btnF);
 		
 		JButton btnG = new JButton("G");
-		btnG.setBounds(518, 106, 45, 23);
+		btnG.setBounds(519, 122, 45, 23);
 		contentPane.add(btnG);
 		
 		JButton btnN = new JButton("N");
-		btnN.setBounds(518, 140, 45, 23);
+		btnN.setBounds(519, 156, 45, 23);
 		contentPane.add(btnN);
 		
 		JButton btnM = new JButton("M");
-		btnM.setBounds(469, 140, 45, 23);
+		btnM.setBounds(470, 156, 45, 23);
 		contentPane.add(btnM);
 		
 		JButton btnL = new JButton("L");
-		btnL.setBounds(420, 140, 45, 23);
+		btnL.setBounds(421, 156, 45, 23);
 		contentPane.add(btnL);
 		
 		JButton btnK = new JButton("K");
-		btnK.setBounds(371, 140, 45, 23);
+		btnK.setBounds(372, 156, 45, 23);
 		contentPane.add(btnK);
 		
 		JButton btnJ = new JButton("J");
-		btnJ.setBounds(322, 140, 45, 23);
+		btnJ.setBounds(323, 156, 45, 23);
 		contentPane.add(btnJ);
 		
 		JButton btnI = new JButton("I");
-		btnI.setBounds(274, 140, 45, 23);
+		btnI.setBounds(275, 156, 45, 23);
 		contentPane.add(btnI);
 		
 		JButton btnH = new JButton("H");
-		btnH.setBounds(225, 140, 45, 23);
+		btnH.setBounds(226, 156, 45, 23);
 		contentPane.add(btnH);
 		
 		JButton btnU = new JButton("U");
-		btnU.setBounds(247, 208, 45, 23);
+		btnU.setBounds(248, 224, 45, 23);
 		contentPane.add(btnU);
 		
 		JButton btnT = new JButton("T");
-		btnT.setBounds(518, 174, 45, 23);
+		btnT.setBounds(519, 190, 45, 23);
 		contentPane.add(btnT);
 		
 		JButton btnS = new JButton("S");
-		btnS.setBounds(469, 174, 45, 23);
+		btnS.setBounds(470, 190, 45, 23);
 		contentPane.add(btnS);
 		
 		JButton btnR = new JButton("R");
-		btnR.setBounds(420, 174, 45, 23);
+		btnR.setBounds(421, 190, 45, 23);
 		contentPane.add(btnR);
 		
 		JButton btnQ = new JButton("Q");
-		btnQ.setBounds(371, 174, 45, 23);
+		btnQ.setBounds(372, 190, 45, 23);
 		contentPane.add(btnQ);
 		
 		JButton btnP = new JButton("P");
-		btnP.setBounds(323, 174, 45, 23);
+		btnP.setBounds(324, 190, 45, 23);
 		contentPane.add(btnP);
 		
 		JButton btnO = new JButton("O");
-		btnO.setBounds(274, 174, 45, 23);
+		btnO.setBounds(275, 190, 45, 23);
 		contentPane.add(btnO);
 		
 		JButton btnZ = new JButton("Z");
-		btnZ.setBounds(492, 208, 45, 23);
+		btnZ.setBounds(493, 224, 45, 23);
 		contentPane.add(btnZ);
 		
 		JButton btnY = new JButton("Y");
-		btnY.setBounds(443, 208, 45, 23);
+		btnY.setBounds(444, 224, 45, 23);
 		contentPane.add(btnY);
 		
 		JButton btnX = new JButton("X");
-		btnX.setBounds(394, 208, 45, 23);
+		btnX.setBounds(395, 224, 45, 23);
 		contentPane.add(btnX);
 		
 		JButton btnW = new JButton("W");
-		btnW.setBounds(345, 208, 45, 23);
+		btnW.setBounds(346, 224, 45, 23);
 		contentPane.add(btnW);
 		
 		JButton btnV = new JButton("V");
-		btnV.setBounds(297, 208, 45, 23);
+		btnV.setBounds(298, 224, 45, 23);
 		contentPane.add(btnV);
 		
 		JButton btnNEsp = new JButton("\u00D1");
-		btnNEsp.setBounds(225, 174, 45, 23);
+		btnNEsp.setBounds(226, 190, 45, 23);
 		contentPane.add(btnNEsp);
+		
+		JLabel lPEncrip = new JLabel("_ _ _ _");
+		lPEncrip.setHorizontalAlignment(SwingConstants.CENTER);
+		lPEncrip.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		lPEncrip.setBounds(298, 78, 191, 30);
+		contentPane.add(lPEncrip);
+		
+		JLabel lblNewLabel = new JLabel("New label");
+		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		lblNewLabel.setBounds(226, 61, 338, 23);
+		contentPane.add(lblNewLabel);
 	}
 }
