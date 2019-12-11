@@ -1,101 +1,38 @@
-import java.awt.Font;
-import java.awt.Image;
-import java.io.BufferedReader;
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.RandomAccessFile;
-import java.net.Socket;
+import java.awt.BorderLayout;
+import java.awt.EventQueue;
 
-import javax.swing.*;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
-public class AdivinadorAhorcado extends JFrame{
-	private Socket s=null;
-	private JPanel contentPane;
-	private JTextField textField;
-	JPanel panel;
-	
-	public AdivinadorAhorcado(Socket s) {
-		this.s=s;
-		
-		//InterfazGráfica
-		interfazGraficaAdivinador();
-		
+import javax.swing.JLabel;
+import javax.swing.JTextField;
+import javax.swing.JButton;
+import java.awt.Font;
 
-	}
-	
-	public void comenzarJuego() {
-		
-		try (	BufferedReader teclado = new BufferedReader(new InputStreamReader(System.in));					
-				DataInputStream dis =  new DataInputStream(s.getInputStream());
-				DataOutputStream dos =  new DataOutputStream(s.getOutputStream());
-				){
-			// TODO Auto-generated method stub
-			System.out.println("El otro jugador esta eligiendo la palabra...");
-			String palabraAdivinar=dis.readLine();
-			System.out.println("Tu palabra a adivinar es: ");
-			System.out.println(palabraAdivinar);
-			
-			int intentoFoto=0;
-			boolean terminado=false;
-			while(!terminado) {
-				System.out.println("Introduce letra a preguntar");
-				String letra = teclado.readLine();
-				dos.writeBytes(letra+"\r\n");
-			
-				String esta=dis.readLine();
-				if (esta.equalsIgnoreCase("END")) {
-					String fin=dis.readLine();
-					System.out.println(fin);
-					terminado=true;
-				}
-				else if (esta.equalsIgnoreCase(palabraAdivinar)){
-					System.out.println("INCORRECTO. La letra no esta contenida. ");
-					System.out.println(palabraAdivinar);
-					String urlFotoG="ahorcado"+intentoFoto+".png";
-					System.out.println(urlFotoG);
-					String urlFoto="C:\\Users\\David\\Desktop\\Carrera\\4º Carrera\\Sistemas Distribuidos\\Fotos Ahorcado\\fallo"+intentoFoto+".png";
-					System.out.println(urlFoto);
-					try(FileOutputStream fout =new FileOutputStream(new File(urlFotoG));
-							FileInputStream f = new FileInputStream(urlFoto)){
-						byte [] buff = new byte[1024*32];
-						int leidos = f.read(buff);
-						while (leidos != -1) {
-							fout.write(buff, 0, leidos);
-							leidos = f.read(buff);
-						}
-						fout.flush();
-						JPanel p = new JPanel();
-						ImageIcon i= new ImageIcon(urlFoto);
-						JLabel img=new JLabel();
-						img.setIcon(i);
-						img.setSize(124,134);
-						p.add(img);
-						img.setVisible(true);
-						intentoFoto++;
-					}
-					
-				}				
-				else {
-					System.out.println("CORRECTO. La letra esta contenida. ");
-					palabraAdivinar=esta;
-					System.out.println(palabraAdivinar);
+public class InterfazAdivinador extends JFrame {
+
+	private JPanel contentPane;
+
+	/**
+	 * Launch the application.
+	 */
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					InterfazAdivinador frame = new InterfazAdivinador();
+					frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
 				}
 			}
-				
-			
-		}catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		});
 	}
-	
-	public void interfazGraficaAdivinador() {
-		
+
+	/**
+	 * Create the frame.
+	 */
+	public InterfazAdivinador() {
 		setTitle("Juego del Ahorcado");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 624, 387);
@@ -108,14 +45,6 @@ public class AdivinadorAhorcado extends JFrame{
 		lblIntroduceLetra.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		lblIntroduceLetra.setBounds(317, 65, 171, 30);
 		contentPane.add(lblIntroduceLetra);
-		
-		ImageIcon ip= new ImageIcon("C:\\Users\\David\\Desktop\\Carrera\\4º Carrera\\Sistemas Distribuidos\\Fotos Ahorcado\\fallo0.png");
-		JLabel imgg=new JLabel();
-		imgg.setBounds(40, 80, 120, 160);
-		ImageIcon iscalado= new ImageIcon(ip.getImage().getScaledInstance(imgg.getWidth(), imgg.getHeight(), Image.SCALE_DEFAULT));		
-		imgg.setIcon(iscalado);		
-		imgg.setVisible(true);
-		contentPane.add(imgg);
 		
 		JButton btnA = new JButton("A");
 		btnA.setBounds(225, 106, 45, 23);
@@ -225,5 +154,4 @@ public class AdivinadorAhorcado extends JFrame{
 		btnNEsp.setBounds(225, 174, 45, 23);
 		contentPane.add(btnNEsp);
 	}
-	
 }
