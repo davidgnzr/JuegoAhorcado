@@ -15,6 +15,7 @@ import java.awt.event.ActionEvent;
 public class InterfazAdivinador extends JFrame {
 
 	private JPanel contentPane;
+	private JTextField textField;
 
 	/**
 	 * Launch the application.
@@ -50,90 +51,9 @@ public class InterfazAdivinador extends JFrame {
 		lblIntroduceLetra.setBounds(307, 26, 171, 30);
 		contentPane.add(lblIntroduceLetra);
 		
-		JButton btnA = new JButton("A");
-		btnA.setEnabled(false);
-		btnA.setBounds(226, 122, 45, 23);
-		contentPane.add(btnA);
-		
-		JButton btnB = new JButton("B");
-		btnB.setBounds(275, 122, 45, 23);
-		contentPane.add(btnB);
-		
-		JButton btnC = new JButton("C");
-		btnC.setBounds(323, 122, 45, 23);
-		contentPane.add(btnC);
-		
-		JButton btnD = new JButton("D");
-		btnD.setBounds(372, 122, 45, 23);
-		contentPane.add(btnD);
-		
-		JButton btnE = new JButton("E");
-		btnE.setBounds(421, 122, 45, 23);
-		contentPane.add(btnE);
-		
-		JButton btnF = new JButton("F");
-		btnF.setBounds(470, 122, 45, 23);
-		contentPane.add(btnF);
-		
-		JButton btnG = new JButton("G");
-		btnG.setBounds(519, 122, 45, 23);
-		contentPane.add(btnG);
-		
-		JButton btnN = new JButton("N");
-		btnN.setBounds(519, 156, 45, 23);
-		contentPane.add(btnN);
-		
-		JButton btnM = new JButton("M");
-		btnM.setBounds(470, 156, 45, 23);
-		contentPane.add(btnM);
-		
-		JButton btnL = new JButton("L");
-		btnL.setBounds(421, 156, 45, 23);
-		contentPane.add(btnL);
-		
-		JButton btnK = new JButton("K");
-		btnK.setBounds(372, 156, 45, 23);
-		contentPane.add(btnK);
-		
-		JButton btnJ = new JButton("J");
-		btnJ.setBounds(323, 156, 45, 23);
-		contentPane.add(btnJ);
-		
-		JButton btnI = new JButton("I");
-		btnI.setBounds(275, 156, 45, 23);
-		contentPane.add(btnI);
-		
-		JButton btnH = new JButton("H");
-		btnH.setBounds(226, 156, 45, 23);
-		contentPane.add(btnH);
-		
 		JButton btnU = new JButton("U");
 		btnU.setBounds(248, 224, 45, 23);
 		contentPane.add(btnU);
-		
-		JButton btnT = new JButton("T");
-		btnT.setBounds(519, 190, 45, 23);
-		contentPane.add(btnT);
-		
-		JButton btnS = new JButton("S");
-		btnS.setBounds(470, 190, 45, 23);
-		contentPane.add(btnS);
-		
-		JButton btnR = new JButton("R");
-		btnR.setBounds(421, 190, 45, 23);
-		contentPane.add(btnR);
-		
-		JButton btnQ = new JButton("Q");
-		btnQ.setBounds(372, 190, 45, 23);
-		contentPane.add(btnQ);
-		
-		JButton btnP = new JButton("P");
-		btnP.setBounds(324, 190, 45, 23);
-		contentPane.add(btnP);
-		
-		JButton btnO = new JButton("O");
-		btnO.setBounds(275, 190, 45, 23);
-		contentPane.add(btnO);
 		
 		JButton btnZ = new JButton("Z");
 		btnZ.setBounds(493, 224, 45, 23);
@@ -162,17 +82,6 @@ public class InterfazAdivinador extends JFrame {
 		lblNewLabel.setBounds(226, 61, 338, 23);
 		contentPane.add(lblNewLabel);
 		
-		JPanel panel = new JPanel();
-		panel.setBounds(212, 110, 371, 184);
-		contentPane.add(panel);
-
-		
-		JButton btnNEsp = new JButton("\u00D1");
-		panel.add(btnNEsp);
-		
-		JButton btnV = new JButton("V");
-		panel.add(btnV);
-		
 		JLabel lblIntentosRestantes = new JLabel("Intentos restantes:");
 		lblIntentosRestantes.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		lblIntentosRestantes.setBounds(23, 312, 128, 25);
@@ -183,5 +92,26 @@ public class InterfazAdivinador extends JFrame {
 		lblCorrecto.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		lblCorrecto.setBounds(212, 305, 361, 25);
 		contentPane.add(lblCorrecto);
+		
+		JPanel panel = new JPanel();
+		panel.setBounds(273, 119, 265, 94);
+		contentPane.add(panel);
+		panel.setLayout(null);
+		
+		textField = new JTextField();
+		textField.setBounds(0, 11, 86, 20);
+		panel.add(textField);
+		textField.setColumns(10);
+		
+		JButton btnSI = new JButton("SI");
+		btnSI.setBounds(129, 77, 80, 40);
+		contentPane.add(btnSI);
+		
+		JButton btnNO = new JButton("NO");
+		btnNO.setBounds(139, 119, 80, 40);
+		contentPane.add(btnNO);
+		
+				btnNO.setVisible(true);
+		btnSI.setVisible(true);
 	}
 }

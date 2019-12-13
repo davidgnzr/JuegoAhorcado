@@ -23,6 +23,7 @@ public class AdivinadorAhorcado extends JFrame{
 	private JLabel lEstado;
 	private JLabel lCorrecto;
 	private JLabel lIntentosRestantes;
+	private JLabel lblIntroduceLetra;
 	private String letraP;
 	private JPanel panelB;
 	private int intentos;
@@ -49,12 +50,20 @@ public class AdivinadorAhorcado extends JFrame{
 			while(!terminado) {
 				setlEstado("Pulsa la letra a preguntar");				
 				String esta=dis.readLine();
-				if (esta.equalsIgnoreCase("END")) {
+				if (esta.equalsIgnoreCase("ENDV")||esta.equalsIgnoreCase("ENDM")) {//Si el juego ha acabado se entra al if
 					String Pfinal=dis.readLine();
 					String fin=dis.readLine();
-					String urlFoto="FotosAhorcado\\fallo"+intentoFoto+".png";
-					crearImagen(urlFoto);
+					if(esta.equalsIgnoreCase("ENDM")) {//Si el juego ha terminado con la muerte, se pone la foto del muñeco colgado.
+						String urlFoto="FotosAhorcado\\fallo"+intentoFoto+".png";
+						crearImagen(urlFoto);
+						setlblIntroduceLetra("PERDISTE");
+					}else{//Si el juego ha terminado con la palabra acertada, se mantiene la foto que estaba desde el último fallo.	
+						setlblIntroduceLetra("GANASTE");
+					}
+					lCorrecto.setVisible(false);
 					setlPEncrip(Pfinal);
+					setlEstado("Juego finalizado");
+					lIntentosRestantes.setVisible(false);
 					JOptionPane.showMessageDialog(this, fin);
 					panelB.setVisible(false);
 					terminado=true;
@@ -86,6 +95,10 @@ public class AdivinadorAhorcado extends JFrame{
 	
 	public void setlPEncrip(String s) {
 		lPEncrip.setText(s);
+	}
+	
+	public void setlblIntroduceLetra(String s) {
+		lblIntroduceLetra.setText(s);
 	}
 	
 	public void setlEstado(String s) {
@@ -123,7 +136,7 @@ public class AdivinadorAhorcado extends JFrame{
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
-		JLabel lblIntroduceLetra = new JLabel("ADIVINE LA PALABRA");
+		lblIntroduceLetra = new JLabel("ADIVINE LA PALABRA");
 		lblIntroduceLetra.setHorizontalAlignment(SwingConstants.CENTER);
 		lblIntroduceLetra.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		lblIntroduceLetra.setBounds(307, 26, 171, 30);

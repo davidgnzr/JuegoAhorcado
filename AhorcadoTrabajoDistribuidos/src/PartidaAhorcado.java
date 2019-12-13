@@ -56,26 +56,24 @@ public class PartidaAhorcado implements Runnable {
 				String letra=dis1.readLine();
 				dos2.writeBytes(letra+"\r\n");
 				acertado=dis2.readLine();
-				if(acertado.equalsIgnoreCase("NO")) {
-					intentos--;
-					System.out.println("Intentos restantes: "+intentos);
-				}
-			
+				System.out.println(acertado);
 				if(intentos==0) {
 					finalizado=true;
-					dos2.writeBytes("END"+"\r\n");
-					dos1.writeBytes("END"+"\r\n");
+					dos2.writeBytes("ENDM"+"\r\n");
+					dos1.writeBytes("ENDM"+"\r\n");
 					dos2.writeBytes("Enhorabuena!! Has ganado."+"\r\n");
 					dos1.writeBytes(palabra+"\r\n");
 					dos1.writeBytes("Has perdido, no has conseguido adivinar la palabra."+"\r\n");
 				}
 				else {
+					
 					palabraEncrip=dis2.readLine();
+					System.out.println(palabraEncrip);
 					int lRestantes= palabraEncrip.indexOf("_");
 					if (lRestantes==-1) {
 						finalizado=true;
-						dos2.writeBytes("END"+"\r\n");
-						dos1.writeBytes("END"+"\r\n");
+						dos2.writeBytes("ENDV"+"\r\n");
+						dos1.writeBytes("ENDV"+"\r\n");
 						dos2.writeBytes("Has perdido, el otro jugador ha acertado la palabra."+"\r\n");
 						dos1.writeBytes(palabraEncrip+"\r\n");
 						dos1.writeBytes("Enhorabuena!! Has ganado."+"\r\n");
