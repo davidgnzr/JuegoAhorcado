@@ -56,7 +56,6 @@ public class PartidaAhorcado implements Runnable {
 				String letra=dis1.readLine();
 				dos2.writeBytes(letra+"\r\n");
 				acertado=dis2.readLine();
-				System.out.println(acertado);
 				if(intentos==0) {
 					finalizado=true;
 					dos2.writeBytes("ENDM"+"\r\n");
@@ -68,7 +67,6 @@ public class PartidaAhorcado implements Runnable {
 				else {
 					
 					palabraEncrip=dis2.readLine();
-					System.out.println(palabraEncrip);
 					int lRestantes= palabraEncrip.indexOf("_");
 					if (lRestantes==-1) {
 						finalizado=true;
@@ -81,12 +79,6 @@ public class PartidaAhorcado implements Runnable {
 					}else {
 						dos1.writeBytes(palabraEncrip+"\r\n");
 						dos2.writeBytes("OK"+"\r\n");
-						if(acertado.equalsIgnoreCase("NO")) {
-							//File f=new File("C:\\Users\\David\\Desktop\\Carrera\\4º Carrera\\Sistemas Distribuidos\\Fotos Ahorcado\\fallo0.png");
-							
-							//dos1.writeBytes(f.toString());
-							
-						}
 					}
 				}
 			}

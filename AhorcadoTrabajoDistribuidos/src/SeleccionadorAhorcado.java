@@ -90,7 +90,12 @@ public class SeleccionadorAhorcado extends JFrame{
 		JButton jbP= (JButton) e.getSource();
 		String contenido=jbP.getText();
 		palabraEncrip="";
-		if (contenido.equalsIgnoreCase("SI")) {
+		int cierto= palabra.indexOf(letra);//Se comprueba que el jugador no se ha equivocado a la hora de pulsar el botón.
+		
+		if(cierto!=-1 ) {
+			if(contenido.equalsIgnoreCase("NO")) {//Si se ha equivocado se le avisa.
+				JOptionPane.showMessageDialog(this, "SÍ ESTÁ LA LETRA. PRESTA ATENCIÓN");
+			}
 			int i=0;
 			int indexl=0;			
 			while(i<numLetras) {
@@ -112,8 +117,12 @@ public class SeleccionadorAhorcado extends JFrame{
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
+		}
 				
-		}else if (contenido.equalsIgnoreCase("NO")) {
+		if(cierto==-1) {
+			if(contenido.equalsIgnoreCase("SI")) {//Si se ha equivocado se le avisa.
+				JOptionPane.showMessageDialog(this, "NO ESTÁ. PRESTA ATENCIÓN");
+			}
 			try {
 				dos.writeBytes("NO"+"\r\n");
 				dos.writeBytes(antigPalabraEncrip+"\r\n");
@@ -125,7 +134,7 @@ public class SeleccionadorAhorcado extends JFrame{
 			} catch (IOException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
-			}			
+			}
 		}
 		setlEstado("Esperando letra del otro jugador...");
 		panelB.setVisible(false);
