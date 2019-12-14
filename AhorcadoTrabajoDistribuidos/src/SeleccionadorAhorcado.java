@@ -53,11 +53,19 @@ public class SeleccionadorAhorcado extends JFrame{
 						}else{
 							setlblIntroduceLetra("PERDISTE");
 						}
+						int puntos=dis.readInt();	
+						System.out.println("Puntos: "+puntos);
 						lIntentosRestantes.setVisible(false);
 						JOptionPane.showMessageDialog(this, fin);
 						panelB.setVisible(false);
 						setlEstado("Juego finalizado");
 						terminado=true;
+						//Se muestran los puntos conseguidos durante la partida.
+						JLabel lPuntos = new JLabel("PUNTOS: "+puntos);
+						lPuntos.setHorizontalAlignment(SwingConstants.CENTER);
+						lPuntos.setFont(new Font("Tahoma", Font.PLAIN, 15));
+						lPuntos.setBounds(307, 150, 171, 30);
+						contentPane.add(lPuntos);
 					}
 
 				}
@@ -162,7 +170,7 @@ public class SeleccionadorAhorcado extends JFrame{
 		lPalabra.setBounds(298, 78, 191, 30);
 		contentPane.add(lPalabra);
 		
-		lEstado = new JLabel("Escriba la palabra a adivinar");
+		lEstado = new JLabel("Escriba la palabra a adivinar en mayúsculas y sin acento");
 		lEstado.setHorizontalAlignment(SwingConstants.CENTER);
 		lEstado.setBounds(226, 61, 338, 23);
 		contentPane.add(lEstado);
@@ -179,7 +187,7 @@ public class SeleccionadorAhorcado extends JFrame{
 		contentPane.add(lImg);
 		crearImagen("FotosAhorcado\\fallo0.png");
 		
-		intentos=6;
+		intentos=7;
 		lIntentosRestantes = new JLabel("Intentos restantes del contrincante: " + intentos);
 		lIntentosRestantes.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		lIntentosRestantes.setBounds(30, 250, 250, 25);

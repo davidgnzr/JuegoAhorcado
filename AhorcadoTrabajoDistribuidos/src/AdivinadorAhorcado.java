@@ -60,6 +60,8 @@ public class AdivinadorAhorcado extends JFrame{
 					}else{//Si el juego ha terminado con la palabra acertada, se mantiene la foto que estaba desde el último fallo.	
 						setlblIntroduceLetra("GANASTE");
 					}
+					int puntos=dis.readInt();	
+					System.out.println("Puntos: "+puntos);
 					lCorrecto.setVisible(false);
 					setlPEncrip(Pfinal);
 					setlEstado("Juego finalizado");
@@ -67,6 +69,12 @@ public class AdivinadorAhorcado extends JFrame{
 					JOptionPane.showMessageDialog(this, fin);
 					panelB.setVisible(false);
 					terminado=true;
+					//Se muestran los puntos conseguidos durante la partida.
+					JLabel lPuntos = new JLabel("PUNTOS: "+puntos);
+					lPuntos.setHorizontalAlignment(SwingConstants.CENTER);
+					lPuntos.setFont(new Font("Tahoma", Font.PLAIN, 15));
+					lPuntos.setBounds(307, 150, 171, 30);
+					contentPane.add(lPuntos);
 				}
 				else if (esta.equalsIgnoreCase(palabraAdivinar)){
 					setlCorrecto("INCORRECTO. Letra no contenida.");
@@ -145,7 +153,7 @@ public class AdivinadorAhorcado extends JFrame{
 		lPEncrip = new JLabel("");
 		lPEncrip.setHorizontalAlignment(SwingConstants.CENTER);
 		lPEncrip.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		lPEncrip.setBounds(298, 78, 191, 30);
+		lPEncrip.setBounds(278, 78, 220, 30);
 		contentPane.add(lPEncrip);
 		
 		lEstado = new JLabel("El otro jugador esta eligiendo la palabra...");
@@ -163,7 +171,7 @@ public class AdivinadorAhorcado extends JFrame{
 		contentPane.add(lImg);
 		crearImagen("FotosAhorcado\\fallo0.png");
 		
-		intentos=6;
+		intentos=7;
 		lIntentosRestantes = new JLabel("Intentos restantes: " + intentos);
 		lIntentosRestantes.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		lIntentosRestantes.setBounds(40, 250, 128, 25);
