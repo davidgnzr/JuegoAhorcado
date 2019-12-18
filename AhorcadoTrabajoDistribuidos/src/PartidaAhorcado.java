@@ -3,6 +3,7 @@ import java.io.DataOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.net.Socket;
+import java.util.Random;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -17,7 +18,6 @@ import javax.xml.transform.stream.StreamResult;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
-import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
@@ -30,8 +30,15 @@ public class PartidaAhorcado implements Runnable {
 		
 		
 	public PartidaAhorcado(Socket sjug1,Socket sjug2) {
+		Random r = new Random();
+		int rol = r.nextInt(2);  //Se recibe un 0 o un 1 de forma aleatoria para asignar los roles.
+		if (rol==0) {
 			this.sjug1 = sjug1;
 			this.sjug2 = sjug2;
+		}else {
+			this.sjug1 = sjug2;
+			this.sjug2 = sjug1;
+		}
 	}
 	
 	@Override
@@ -48,18 +55,13 @@ public class PartidaAhorcado implements Runnable {
 			dis1 =  new DataInputStream(this.sjug1.getInputStream());
 			dis2 =  new DataInputStream(this.sjug2.getInputStream());
 			
-			String bienvenida= "Bienvenidos al juego del Ahorcado \r\n";
-			String roladivinar="Tú vas a adivinar. \r\n";
-			String rolelegir="Tú vas a decidir la palabra. \r\n";
 			String adivinar="Adivinar\r\n";
 			String elegir="Elegir\r\n";
-			dos1.writeBytes(bienvenida);
-			dos2.writeBytes(bienvenida);
-			dos1.writeBytes(roladivinar);
-			dos2.writeBytes(rolelegir);
 			dos1.writeBytes(adivinar);
 			dos2.writeBytes(elegir);
 			
+			nombreJugador=dis1.readLine();
+						
 			String palabra=dis2.readLine();
 			String palabraEncrip=dis2.readLine();
 			dos1.writeBytes(palabraEncrip+"\r\n");
@@ -122,10 +124,20 @@ public class PartidaAhorcado implements Runnable {
 					}
 				}
 			}
+			
+			if(nombreJugador.equals("anonimo")==false) {
+				arbolDom(dos1);
+			}else {
+				dos1.writeBytes("Tu máxima puntuación es: "+puntos +"\r\n");
+			}
+			
 		}catch (IOException e) {
 			e.printStackTrace();
 		}
-		
+
+	}
+	
+	public void arbolDom(DataOutputStream dos) {
 		//Segunda parte del ahorcado para guardar los puntos obtenidos por el jugador
 		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 		DocumentBuilder db;
@@ -136,7 +148,6 @@ public class PartidaAhorcado implements Runnable {
 				NodeList hijos = root.getElementsByTagName("jugador");
 				boolean encontrado=false;
 				int i =0;
-				nombreJugador=new String("David");
 				
 				System.out.println(hijos.getLength());
 				while((i<hijos.getLength()) && (!encontrado)) {//El getChildNodes devuelve todo, hasta los saltos de linea. Por eso hay que coger solo los que son elementos.
@@ -146,12 +157,24 @@ public class PartidaAhorcado implements Runnable {
 						System.out.println(nombre.toString());
 						if (nombre.equals(nombreJugador) ){
 							encontrado=true;
+							int maxPuntos=puntos;
 							Element puntosN =doc.createElement ("puntos");
 							String p=String.valueOf(puntos);
 							puntosN.setTextContent(p);
 							hijos.item(i).appendChild(puntosN);
-							System.out.println("He añadido los puntos a: "+ nombre);
+							System.out.println("He añadido los puntos "+puntos+" a: "+ nombre);
 							
+							NodeList puntos=((Element) hijos.item(i)).getElementsByTagName("puntos");//Sacamos los puntos del jugador.
+							int punt=0;
+							for(int ii=0;ii<puntos.getLength();ii++) {
+								punt=Integer.parseInt(puntos.item(ii).getTextContent());
+								System.out.println(punt);
+								if(maxPuntos<punt) {
+									maxPuntos=punt;
+								}
+							}							
+							dos.writeBytes("Tu máxima puntuación es: "+maxPuntos +"\r\n");
+							System.out.println("Tu máxima puntuación es: "+maxPuntos +"\r\n");
 						}
 						i++;
 				}
@@ -166,6 +189,7 @@ public class PartidaAhorcado implements Runnable {
 					Jugador.appendChild(puntosN);
 					root.appendChild(Jugador);
 					System.out.println("He creado un jugador nuevo");
+					dos.writeBytes("Tu máxima puntuación ha sido: "+puntos +"\r\n");
 				}
 								
 				TransformerFactory tf = TransformerFactory.newInstance();
@@ -180,7 +204,6 @@ public class PartidaAhorcado implements Runnable {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
 	}
 
 }

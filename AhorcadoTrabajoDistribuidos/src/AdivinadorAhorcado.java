@@ -5,27 +5,17 @@ import java.awt.event.ActionListener;
 import java.io.BufferedReader;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.RandomAccessFile;
 import java.net.Socket;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 public class AdivinadorAhorcado extends JFrame{
 	private Socket s=null;
-	private JPanel contentPane;
-	private JLabel lPEncrip;
-	private JLabel lImg;
-	private JLabel lEstado;
-	private JLabel lCorrecto;
-	private JLabel lIntentosRestantes;
-	private JLabel lblIntroduceLetra;
+	private JPanel contentPane,panelB,panelC;
+	private JLabel lPEncrip,lImg,lEstado,lCorrecto,lIntentosRestantes,lblIntroduceLetra;
 	private String letraP;
-	private JPanel panelB;
 	private int intentos;
 	
 	public AdivinadorAhorcado(Socket s) {
@@ -41,43 +31,97 @@ public class AdivinadorAhorcado extends JFrame{
 				DataInputStream dis =  new DataInputStream(s.getInputStream());
 				DataOutputStream dos =  new DataOutputStream(s.getOutputStream());
 				){
-			// TODO Auto-generated method stub
+			// TODO Auto-generated method stub	
+			
+			//Se guarda el nombre del jugador para almacenar su puntuación en la tabla de puntos.
+			panelC = new JPanel();
+			panelC.setBounds(250, 119, 265, 141);
+			contentPane.add(panelC);
+			panelC.setLayout(null);
+			panelC.setVisible(false);
+			
+			JTextField tnombre = new JTextField();
+			tnombre.setBounds(22, 6, 113, 30);
+			panelC.add(tnombre);
+			tnombre.setColumns(10);
+			
+			JButton btnElegir = new JButton("Iniciar");
+			btnElegir.setBounds(144, 10, 111, 23);
+			panelC.add(btnElegir);
+			
+			tnombre.setVisible(true);
+			btnElegir.setVisible(true);
+			
+			panelC.setVisible(true);
+			btnElegir.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {			
+					try {
+						//Si no ha puesto nombre se le asigna anonimo.
+						if (tnombre.getText().isEmpty()) {
+							dos.writeBytes("anonimo\r\n");
+						}else {
+							dos.writeBytes(tnombre.getText()+"\r\n");
+						}						
+					} catch (IOException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+					tnombre.setVisible(false);
+					btnElegir.setVisible(false);
+					panelC.remove(tnombre);
+					panelC.remove(btnElegir);
+					panelC.setVisible(false);
+					lEstado.setText("El otro jugador esta eligiendo la palabra...");
+				}
+			});
+			
+			//Se recibe la palabra a adivinar y se crean los botones.
 			String palabraAdivinar=dis.readLine();
-			setlPEncrip(palabraAdivinar);
+			lPEncrip.setText(palabraAdivinar);
 			crearBotones(dos);
 			int intentoFoto=1;
 			boolean terminado=false;
 			while(!terminado) {
-				setlEstado("Pulsa la letra a preguntar");				
+				lEstado.setText("Pulsa la letra a preguntar");				
 				String esta=dis.readLine();
 				if (esta.equalsIgnoreCase("ENDV")||esta.equalsIgnoreCase("ENDM")) {//Si el juego ha acabado se entra al if
-					String Pfinal=dis.readLine();
+					String palabraFinal=dis.readLine();
 					String fin=dis.readLine();
-					if(esta.equalsIgnoreCase("ENDM")) {//Si el juego ha terminado con la muerte, se pone la foto del muñeco colgado.
+					if(esta.equalsIgnoreCase("ENDM")) {//Si los intentos se han agotado, se pone la foto del muñeco colgado.
 						String urlFoto="FotosAhorcado\\fallo"+intentoFoto+".png";
 						crearImagen(urlFoto);
-						setlblIntroduceLetra("PERDISTE");
-					}else{//Si el juego ha terminado con la palabra acertada, se mantiene la foto que estaba desde el último fallo.	
-						setlblIntroduceLetra("GANASTE");
+						lblIntroduceLetra.setText("PERDISTE");
+					}else{//Si la palabra se ha acertado, se mantiene la foto que estaba desde el último fallo.	
+						lblIntroduceLetra.setText("GANASTE");
 					}
 					int puntos=dis.readInt();	
-					System.out.println("Puntos: "+puntos);
 					lCorrecto.setVisible(false);
-					setlPEncrip(Pfinal);
-					setlEstado("Juego finalizado");
+					lPEncrip.setText(palabraFinal);
+					lEstado.setText("Juego finalizado");
 					lIntentosRestantes.setVisible(false);
 					JOptionPane.showMessageDialog(this, fin);
 					panelB.setVisible(false);
 					terminado=true;
+					
 					//Se muestran los puntos conseguidos durante la partida.
 					JLabel lPuntos = new JLabel("PUNTOS: "+puntos);
 					lPuntos.setHorizontalAlignment(SwingConstants.CENTER);
 					lPuntos.setFont(new Font("Tahoma", Font.PLAIN, 15));
-					lPuntos.setBounds(307, 150, 171, 30);
-					contentPane.add(lPuntos);
+					lPuntos.setBounds(53, 17, 171, 30);
+					panelC.add(lPuntos);
+					
+					//Se recibe la puntuación máxima del jugador registrada en la tabla de puntos.
+					String puntosMax=dis.readLine();
+					JLabel lblNewLabel = new JLabel(puntosMax);
+					lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
+					lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 14));
+					lblNewLabel.setBounds(22, 57, 233, 30);
+					panelC.add(lblNewLabel);
+					panelC.setVisible(true);
+					
 				}
-				else if (esta.equalsIgnoreCase(palabraAdivinar)){
-					setlCorrecto("INCORRECTO. Letra no contenida.");
+				else if (esta.equalsIgnoreCase(palabraAdivinar)){//Si lo recibido es la misma palabra que antes de preguntar la letra, la letra no está contenida.
+					lCorrecto.setText("INCORRECTO. Letra no contenida.");
 					String urlFoto="FotosAhorcado\\fallo"+intentoFoto+".png";
 					crearImagen(urlFoto);
 					intentoFoto++;
@@ -86,10 +130,10 @@ public class AdivinadorAhorcado extends JFrame{
 					panelB.setVisible(true);
 					
 				}				
-				else {
-					setlCorrecto("CORRECTO!! Letra contenida.");
+				else {//La letra preguntada se encuentra en la palabra.
+					lCorrecto.setText("CORRECTO!! Letra contenida.");
 					palabraAdivinar=esta;
-					setlPEncrip(palabraAdivinar);
+					lPEncrip.setText(palabraAdivinar);
 					panelB.setVisible(true);					
 				}			
 			}
@@ -101,44 +145,12 @@ public class AdivinadorAhorcado extends JFrame{
 		}
 	}
 	
-	public void setlPEncrip(String s) {
-		lPEncrip.setText(s);
-	}
-	
-	public void setlblIntroduceLetra(String s) {
-		lblIntroduceLetra.setText(s);
-	}
-	
-	public void setlEstado(String s) {
-		lEstado.setText(s);
-	}
-	
-	public void updatelIntentosRestantes() {
-		lIntentosRestantes.setText("Intentos restantes: " + intentos);
-	}
-	public void setlCorrecto(String s) {
-		lCorrecto.setText(s);
-	}
-	
-	public void btnPulsado(ActionEvent e,DataOutputStream dos) {
-		JButton jbP= (JButton) e.getSource();
-		letraP=jbP.getText();
-		try {
-			dos.writeBytes(letraP+"\r\n");
-			setlEstado("Esperando la respuesta del otro jugador...");
-			jbP.setEnabled(false);
-			panelB.setVisible(false);
-		} catch (IOException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-	}
-	
+	//Pos:Se crea la interfaz gráfica.
 	public void interfazGraficaAdivinador() {
 		
 		setTitle("Juego del Ahorcado");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 624, 387);
+		setBounds(100, 100, 624, 360);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -150,48 +162,73 @@ public class AdivinadorAhorcado extends JFrame{
 		lblIntroduceLetra.setBounds(307, 26, 171, 30);
 		contentPane.add(lblIntroduceLetra);
 				
-		lPEncrip = new JLabel("");
+		lPEncrip = new JLabel("");//Aquí, se encontrará la palabra encriptada.
 		lPEncrip.setHorizontalAlignment(SwingConstants.CENTER);
 		lPEncrip.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		lPEncrip.setBounds(278, 78, 220, 30);
 		contentPane.add(lPEncrip);
 		
-		lEstado = new JLabel("El otro jugador esta eligiendo la palabra...");
+		lEstado = new JLabel("Introduzca su nombre de jugador:");
 		lEstado.setHorizontalAlignment(SwingConstants.CENTER);
 		lEstado.setBounds(226, 61, 338, 23);
 		contentPane.add(lEstado);
 		
-		panelB = new JPanel();
-		panelB.setBounds(212, 110, 371, 134);
-		contentPane.add(panelB);
-		
-		lImg=new JLabel();
+		lImg=new JLabel();//Aquí, irán apareciendo las fotos del ahorcado.
 		lImg.setBounds(30, 40, 140, 200);	
 		lImg.setVisible(true);
 		contentPane.add(lImg);
 		crearImagen("FotosAhorcado\\fallo0.png");
 		
-		intentos=7;
+		intentos=7;//Aquí, aparecerán los intentos restantes.
 		lIntentosRestantes = new JLabel("Intentos restantes: " + intentos);
 		lIntentosRestantes.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		lIntentosRestantes.setBounds(40, 250, 128, 25);
 		contentPane.add(lIntentosRestantes);
-		
-		lCorrecto = new JLabel("");
-		lCorrecto.setHorizontalAlignment(SwingConstants.CENTER);
-		lCorrecto.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		lCorrecto.setBounds(212, 250, 361, 25);
-		contentPane.add(lCorrecto);
-		
+				
 	}
 	
+	//Pos: Se actualiza el numero de intentos restantes.
+	public void updatelIntentosRestantes() {
+		lIntentosRestantes.setText("Intentos restantes: " + intentos);
+	}
+	
+	//Pre: La ruta donde se encuentra la imagen es pasada como parámetro.
+	//Pos: La imagen es actualizada con la nueva ruta.
 	public void crearImagen(String ruta) {
 		ImageIcon ip= new ImageIcon(ruta);
 		ImageIcon iscalado= new ImageIcon(ip.getImage().getScaledInstance(lImg.getWidth(), lImg.getHeight(), Image.SCALE_DEFAULT));		
 		lImg.setIcon(iscalado);	
 	}
 	
+	//Pre:Se pasa la acción del evento y el dataOutputStream para poder enviar la letra pulsada al servidor.
+	//Pos:Se envia la letra que contiene el botón pulsado.
+	public void btnPulsado(ActionEvent e, DataOutputStream dos) {
+		JButton jbP = (JButton) e.getSource();
+		letraP = jbP.getText();
+		try {
+			dos.writeBytes(letraP + "\r\n");
+			lEstado.setText("Esperando la respuesta del otro jugador...");
+			jbP.setEnabled(false);
+			panelB.setVisible(false);
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+	}
+	
+	//Pos: Se crean los botones con sus letras. Al pulsarlos, se llama a la funcion btnPulsado().
 	public void crearBotones(DataOutputStream dos) {
+		
+		panelB = new JPanel();//En este panel, estarán todos los botones con su letra.
+		panelB.setBounds(212, 110, 371, 134);
+		contentPane.add(panelB);
+		panelB.setVisible(false);
+		
+		lCorrecto = new JLabel("");//Aquí, nos mostrará si la letra preguntada se encuentra en la palabra.
+		lCorrecto.setHorizontalAlignment(SwingConstants.CENTER);
+		lCorrecto.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		lCorrecto.setBounds(212, 250, 361, 25);
+		contentPane.add(lCorrecto);
 		
 		JButton btnA = new JButton("A");
 		btnA.setBounds(226, 122, 45, 23);
@@ -464,6 +501,8 @@ public class AdivinadorAhorcado extends JFrame{
 		panelB.add(btnX);
 		panelB.add(btnY);
 		panelB.add(btnZ);
+		
+		panelB.setVisible(true);
 		
 	}
 	

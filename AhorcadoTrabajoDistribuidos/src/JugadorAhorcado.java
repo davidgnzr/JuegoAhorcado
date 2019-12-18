@@ -1,10 +1,7 @@
 
-import java.io.BufferedReader;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
@@ -16,9 +13,6 @@ public class JugadorAhorcado {
 				DataInputStream dis =  new DataInputStream(s.getInputStream());
 				DataOutputStream dos =  new DataOutputStream(s.getOutputStream());
 				){
-			String leidos=dis.readLine();
-			System.out.println(leidos);
-			System.out.println(dis.readLine());
 			String rol=dis.readLine();
 			if (rol.equalsIgnoreCase("Adivinar")){
 				AdivinadorAhorcado aa=new AdivinadorAhorcado(s);

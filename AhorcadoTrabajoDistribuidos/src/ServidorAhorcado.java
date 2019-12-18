@@ -15,6 +15,7 @@ public class ServidorAhorcado{
 			ss= new ServerSocket(7765);
 			while(true)
 			{
+				//Esperamos a que dos clientes se conecten al servidor y empieza la partida.
 				Socket cliente1 = ss.accept();
 				Socket cliente2= ss.accept();
 				PartidaAhorcado sa= new PartidaAhorcado(cliente1,cliente2);
