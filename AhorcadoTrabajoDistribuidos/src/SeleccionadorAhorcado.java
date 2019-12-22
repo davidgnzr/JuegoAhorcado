@@ -2,12 +2,15 @@ import java.awt.Font;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.io.BufferedReader;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.Socket;
+import java.util.EventListener;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -28,17 +31,16 @@ public class SeleccionadorAhorcado extends JFrame{
 	}
 	
 	public void comenzarJuego() {
-		try (BufferedReader teclado = new BufferedReader(new InputStreamReader(System.in));			
+		try (	DataOutputStream dos =  new DataOutputStream(s.getOutputStream());
 				DataInputStream dis =  new DataInputStream(s.getInputStream());
-				DataOutputStream dos =  new DataOutputStream(s.getOutputStream());
-					){
+				){
 				crearComienzo(dos);//Para que escriba la palabra a adivinar.
 				boolean terminado =false;
 				while(!terminado) {
 					letra=dis.readLine();
 					lEstado.setText("¿La palabra contiene la letra: "+letra+" ?");
-					panelB.setVisible(true);
-					String end=dis.readLine();
+					panelB.setVisible(true);//Aparecen los botones de si/no y se manda la respuesta.
+					String end=dis.readLine();//Esperamos la respuesta para saber si era la última letra restante.
 					if (end.equalsIgnoreCase("ENDM")||end.equalsIgnoreCase("ENDV")) {//Si el juego ha acabado se entra al if
 						String fin=dis.readLine();						
 						if(end.equalsIgnoreCase("ENDM")) {
@@ -67,9 +69,13 @@ public class SeleccionadorAhorcado extends JFrame{
 						panelC.add(lPuntos);
 						
 						panelC.setVisible(true);
-					}
-
+					}	
 				}
+		}catch (NullPointerException e) {
+			// TODO Auto-generated catch block
+			JOptionPane.showMessageDialog(this, "El otro jugador ha abandonado la partida");
+			contentPane.setVisible(false);
+			dispose();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -99,7 +105,7 @@ public class SeleccionadorAhorcado extends JFrame{
 		lPalabra.setBounds(298, 78, 191, 30);
 		contentPane.add(lPalabra);
 
-		lEstado = new JLabel("Escriba la palabra a adivinar en mayúsculas y sin acento");
+		lEstado = new JLabel("Escriba la palabra a adivinar sin acentos");
 		lEstado.setHorizontalAlignment(SwingConstants.CENTER);
 		lEstado.setBounds(226, 61, 338, 23);
 		contentPane.add(lEstado);
@@ -114,7 +120,7 @@ public class SeleccionadorAhorcado extends JFrame{
 		lImg.setBounds(30, 40, 140, 200);
 		lImg.setVisible(true);
 		contentPane.add(lImg);
-		crearImagen("FotosAhorcado\\fallo0.png");
+		crearImagen("..\\FotosAhorcado\\fallo0.png");
 
 		intentos = 7;
 		lIntentosRestantes = new JLabel("Intentos restantes del contrincante: " + intentos);
@@ -142,9 +148,27 @@ public class SeleccionadorAhorcado extends JFrame{
 		panelB.add(btnElegir);
 		
 		tPalabra.setVisible(true);
+		btnElegir.setEnabled(false);
 		btnElegir.setVisible(true);
 		
+		
 		panelB.setVisible(true);
+		tPalabra.addKeyListener(new KeyListener(){
+            public void keyTyped (KeyEvent e){	
+			}
+            public void keyPressed (KeyEvent e){	
+			}
+            public void keyReleased (KeyEvent e){
+				palabra=tPalabra.getText().toUpperCase();
+				numLetras=palabra.length();
+				if(numLetras==0) {
+					btnElegir.setEnabled(false);
+				}else {
+					btnElegir.setEnabled(true);
+				}
+			}
+		});
+		
 		btnElegir.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {			
 				palabra=tPalabra.getText().toUpperCase();
@@ -155,7 +179,7 @@ public class SeleccionadorAhorcado extends JFrame{
 				}
 				try {
 					dos.writeBytes(palabra+"\r\n");
-					dos.writeBytes(palabraEncrip+"\r\n");
+					dos.writeBytes(palabraEncrip+"\r\n");	
 				} catch (IOException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
@@ -168,8 +192,7 @@ public class SeleccionadorAhorcado extends JFrame{
 				panelB.setVisible(false);
 				lPalabra.setText(palabra);
 				lEstado.setText("Esperando letra del otro jugador...");
-				botones(dos);//Se crean los botones, pero hasta que no se reciba la letra, no se mostrarán.
-				
+				botones(dos);//Se crean los botones, pero hasta que no se reciba la letra, no se mostrarán.	
 			}
 		});
 	}
@@ -230,7 +253,7 @@ public class SeleccionadorAhorcado extends JFrame{
 				dos.writeBytes("NO"+"\r\n");
 				dos.writeBytes(antigPalabraEncrip+"\r\n");
 				intentoFoto++;
-				String urlFoto="FotosAhorcado\\fallo"+intentoFoto+".png";
+				String urlFoto="..\\FotosAhorcado\\fallo"+intentoFoto+".png";
 				crearImagen(urlFoto);
 				intentos--;
 				updatelIntentosRestantes();

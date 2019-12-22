@@ -10,8 +10,8 @@ public class JugadorAhorcado {
 		// TODO Auto-generated method stub
 		try (
 				Socket s = new Socket("localhost", 7765);
-				DataInputStream dis =  new DataInputStream(s.getInputStream());
 				DataOutputStream dos =  new DataOutputStream(s.getOutputStream());
+				DataInputStream dis =  new DataInputStream(s.getInputStream());				
 				){
 			String rol=dis.readLine();
 			if (rol.equalsIgnoreCase("Adivinar")){
@@ -23,10 +23,6 @@ public class JugadorAhorcado {
 				sa.setVisible(true);
 				sa.comenzarJuego();
 			}
-
-		} catch (UnknownHostException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

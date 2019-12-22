@@ -8,23 +8,27 @@ public class ServidorAhorcado{
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		ServerSocket ss =null;	
-		ExecutorService pool =null;
+		ServerSocket ss = null;	
+		ExecutorService pool = null;
+		Socket cliente1 = null;
+		Socket cliente2 = null;
 		try {
 			pool = Executors.newCachedThreadPool();
 			ss= new ServerSocket(7765);
 			while(true)
 			{
 				//Esperamos a que dos clientes se conecten al servidor y empieza la partida.
-				Socket cliente1 = ss.accept();
-				Socket cliente2= ss.accept();
+				cliente1 = ss.accept();
+				cliente2= ss.accept();
 				PartidaAhorcado sa= new PartidaAhorcado(cliente1,cliente2);
 				pool.execute(sa);
-			}	
+			}
 		} catch (IOException e) {
 			e.printStackTrace();
 		}finally {
 			try {
+				cliente1.close();
+				cliente2.close();
 				pool.shutdown();
 				if(ss!=null)
 				ss.close();

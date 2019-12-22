@@ -6,6 +6,7 @@ import java.io.BufferedReader;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+
 import java.io.InputStreamReader;
 import java.net.Socket;
 
@@ -27,9 +28,8 @@ public class AdivinadorAhorcado extends JFrame{
 	
 	public void comenzarJuego() {
 		
-		try (	BufferedReader teclado = new BufferedReader(new InputStreamReader(System.in));					
+		try (	DataOutputStream dos =  new DataOutputStream(s.getOutputStream());
 				DataInputStream dis =  new DataInputStream(s.getInputStream());
-				DataOutputStream dos =  new DataOutputStream(s.getOutputStream());
 				){
 			// TODO Auto-generated method stub	
 			
@@ -77,6 +77,11 @@ public class AdivinadorAhorcado extends JFrame{
 			
 			//Se recibe la palabra a adivinar y se crean los botones.
 			String palabraAdivinar=dis.readLine();
+			if(palabraAdivinar=="") {
+				JOptionPane.showMessageDialog(this, "El otro jugador no ha elegido palabra.");
+				contentPane.setVisible(false);
+				dispose();
+			}
 			lPEncrip.setText(palabraAdivinar);
 			crearBotones(dos);
 			int intentoFoto=1;
@@ -88,7 +93,7 @@ public class AdivinadorAhorcado extends JFrame{
 					String palabraFinal=dis.readLine();
 					String fin=dis.readLine();
 					if(esta.equalsIgnoreCase("ENDM")) {//Si los intentos se han agotado, se pone la foto del muñeco colgado.
-						String urlFoto="FotosAhorcado\\fallo"+intentoFoto+".png";
+						String urlFoto="..\\FotosAhorcado\\fallo"+intentoFoto+".png";
 						crearImagen(urlFoto);
 						lblIntroduceLetra.setText("PERDISTE");
 					}else{//Si la palabra se ha acertado, se mantiene la foto que estaba desde el último fallo.	
@@ -122,7 +127,7 @@ public class AdivinadorAhorcado extends JFrame{
 				}
 				else if (esta.equalsIgnoreCase(palabraAdivinar)){//Si lo recibido es la misma palabra que antes de preguntar la letra, la letra no está contenida.
 					lCorrecto.setText("INCORRECTO. Letra no contenida.");
-					String urlFoto="FotosAhorcado\\fallo"+intentoFoto+".png";
+					String urlFoto="..\\FotosAhorcado\\fallo"+intentoFoto+".png";
 					crearImagen(urlFoto);
 					intentoFoto++;
 					intentos--;
@@ -139,6 +144,11 @@ public class AdivinadorAhorcado extends JFrame{
 			}
 				
 			
+		}catch (NullPointerException e) {
+			// TODO Auto-generated catch block
+			JOptionPane.showMessageDialog(this, "El otro jugador ha abandonado la partida");
+			contentPane.setVisible(false);
+			dispose();
 		}catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -177,7 +187,7 @@ public class AdivinadorAhorcado extends JFrame{
 		lImg.setBounds(30, 40, 140, 200);	
 		lImg.setVisible(true);
 		contentPane.add(lImg);
-		crearImagen("FotosAhorcado\\fallo0.png");
+		crearImagen("..\\FotosAhorcado\\fallo0.png");
 		
 		intentos=7;//Aquí, aparecerán los intentos restantes.
 		lIntentosRestantes = new JLabel("Intentos restantes: " + intentos);
@@ -198,6 +208,7 @@ public class AdivinadorAhorcado extends JFrame{
 		ImageIcon ip= new ImageIcon(ruta);
 		ImageIcon iscalado= new ImageIcon(ip.getImage().getScaledInstance(lImg.getWidth(), lImg.getHeight(), Image.SCALE_DEFAULT));		
 		lImg.setIcon(iscalado);	
+		lImg.setVisible(true);
 	}
 	
 	//Pre:Se pasa la acción del evento y el dataOutputStream para poder enviar la letra pulsada al servidor.

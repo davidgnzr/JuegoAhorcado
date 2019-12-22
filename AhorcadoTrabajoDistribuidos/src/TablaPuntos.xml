@@ -1,62 +1,53 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<principal>
- <jugador name="Pepe">
- <puntos>115</puntos>
- <puntos>35</puntos>
- <puntos>0</puntos>
- <puntos>135</puntos>
- </jugador>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><principal>
+<jugador name="Pepe">
+	<puntos>115</puntos>
+	<puntos>35</puntos>
+	<puntos>0</puntos>
+	<puntos>135</puntos>
+</jugador>
 <jugador name="Jorge">
- <puntos>95</puntos>
- <puntos>135</puntos>
- <puntos>0</puntos>
-  <puntos>45</puntos>
-  <puntos>45</puntos>
-  </jugador>
+	<puntos>95</puntos>
+	<puntos>135</puntos>
+	<puntos>0</puntos>
+	<puntos>45</puntos>
+	<puntos>45</puntos>
+</jugador>
 <jugador name="Jorge02">
- <puntos>95</puntos>
- <puntos>115</puntos>
- </jugador>
+	<puntos>95</puntos>
+	<puntos>115</puntos>
+</jugador>
 <jugador name="David">
- <puntos>105</puntos>
- <puntos>65</puntos>
- <puntos>0</puntos>
-  <puntos>115</puntos>
-  <puntos>115</puntos>
-  </jugador>
+	<puntos>105</puntos>
+	<puntos>65</puntos>
+	<puntos>0</puntos>
+	<puntos>115</puntos>
+	<puntos>115</puntos>
+</jugador>
 <jugador name="Raul">
- <puntos>115</puntos>
- <puntos>95</puntos>
- <puntos>85</puntos>
-  </jugador>
-<jugador name="Perolo">
-  <puntos>205</puntos>
-  <puntos>55</puntos>
-  <puntos>65</puntos>
-  </jugador>
+	<puntos>115</puntos>
+	<puntos>95</puntos>
+	<puntos>85</puntos>
+</jugador>
 <jugador name="Leo">
     <puntos>85</puntos>
-  <puntos>165</puntos>
-  <puntos>135</puntos>
-  <puntos>135</puntos>
-  <puntos>0</puntos>
-  </jugador>
+	<puntos>165</puntos>
+	<puntos>135</puntos>
+	<puntos>135</puntos>
+	<puntos>0</puntos>
+</jugador>
 <jugador name="Peter">
     <puntos>165</puntos>
-  </jugador>
+</jugador>
 <jugador name="Laura">
     <puntos>115</puntos>
-  <puntos>105</puntos>
-  <puntos>35</puntos>
-  <puntos>55</puntos>
-  <puntos>45</puntos>
-  <puntos>205</puntos>
-  <puntos>45</puntos>
-  </jugador>
+	<puntos>105</puntos>
+	<puntos>35</puntos>
+	<puntos>55</puntos>
+	<puntos>45</puntos>
+	<puntos>205</puntos>
+	<puntos>45</puntos>
+</jugador>
 <jugador name="Paco">
-    <puntos>45</puntos>
-  </jugador>
-<jugador name="Paco11">
-    <puntos>165</puntos>
-  </jugador>
+	<puntos>45</puntos>
+</jugador>
 </principal>
