@@ -102,7 +102,7 @@ public class SeleccionadorAhorcado extends JFrame{
 		lPalabra = new JLabel("");
 		lPalabra.setHorizontalAlignment(SwingConstants.CENTER);
 		lPalabra.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		lPalabra.setBounds(298, 78, 191, 30);
+		lPalabra.setBounds(298, 85, 191, 30);
 		contentPane.add(lPalabra);
 
 		lEstado = new JLabel("Escriba la palabra a adivinar sin acentos");
@@ -120,7 +120,7 @@ public class SeleccionadorAhorcado extends JFrame{
 		lImg.setBounds(30, 40, 140, 200);
 		lImg.setVisible(true);
 		contentPane.add(lImg);
-		crearImagen("..\\FotosAhorcado\\fallo0.png");
+		crearImagen("FotosAhorcado\\fallo0.png");
 
 		intentos = 7;
 		lIntentosRestantes = new JLabel("Intentos restantes del contrincante: " + intentos);
@@ -191,6 +191,22 @@ public class SeleccionadorAhorcado extends JFrame{
 				panelB.remove(btnElegir);
 				panelB.setVisible(false);
 				lPalabra.setText(palabra);
+				
+				//Boton para dejar la palabra visible u ocultarla.
+				JButton btnVer = new JButton("Palabra");
+				btnVer.setBounds(505, 90, 85, 20);
+				btnVer.setHorizontalAlignment(SwingConstants.CENTER);
+				contentPane.add(btnVer);
+				btnVer.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						if(lPalabra.isVisible()) {
+							lPalabra.setVisible(false);
+						}else {
+							lPalabra.setVisible(true);
+						}
+					}
+				});
+				
 				lEstado.setText("Esperando letra del otro jugador...");
 				botones(dos);//Se crean los botones, pero hasta que no se reciba la letra, no se mostrarán.	
 			}
@@ -253,7 +269,7 @@ public class SeleccionadorAhorcado extends JFrame{
 				dos.writeBytes("NO"+"\r\n");
 				dos.writeBytes(antigPalabraEncrip+"\r\n");
 				intentoFoto++;
-				String urlFoto="..\\FotosAhorcado\\fallo"+intentoFoto+".png";
+				String urlFoto="FotosAhorcado\\fallo"+intentoFoto+".png";
 				crearImagen(urlFoto);
 				intentos--;
 				updatelIntentosRestantes();

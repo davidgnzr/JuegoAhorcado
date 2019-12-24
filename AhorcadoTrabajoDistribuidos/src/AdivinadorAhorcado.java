@@ -93,7 +93,7 @@ public class AdivinadorAhorcado extends JFrame{
 					String palabraFinal=dis.readLine();
 					String fin=dis.readLine();
 					if(esta.equalsIgnoreCase("ENDM")) {//Si los intentos se han agotado, se pone la foto del muñeco colgado.
-						String urlFoto="..\\FotosAhorcado\\fallo"+intentoFoto+".png";
+						String urlFoto="FotosAhorcado\\fallo"+intentoFoto+".png";
 						crearImagen(urlFoto);
 						lblIntroduceLetra.setText("PERDISTE");
 					}else{//Si la palabra se ha acertado, se mantiene la foto que estaba desde el último fallo.	
@@ -127,7 +127,7 @@ public class AdivinadorAhorcado extends JFrame{
 				}
 				else if (esta.equalsIgnoreCase(palabraAdivinar)){//Si lo recibido es la misma palabra que antes de preguntar la letra, la letra no está contenida.
 					lCorrecto.setText("INCORRECTO. Letra no contenida.");
-					String urlFoto="..\\FotosAhorcado\\fallo"+intentoFoto+".png";
+					String urlFoto="FotosAhorcado\\fallo"+intentoFoto+".png";
 					crearImagen(urlFoto);
 					intentoFoto++;
 					intentos--;
@@ -187,7 +187,7 @@ public class AdivinadorAhorcado extends JFrame{
 		lImg.setBounds(30, 40, 140, 200);	
 		lImg.setVisible(true);
 		contentPane.add(lImg);
-		crearImagen("..\\FotosAhorcado\\fallo0.png");
+		crearImagen("FotosAhorcado\\fallo0.png");
 		
 		intentos=7;//Aquí, aparecerán los intentos restantes.
 		lIntentosRestantes = new JLabel("Intentos restantes: " + intentos);

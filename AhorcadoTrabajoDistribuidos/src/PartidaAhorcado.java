@@ -26,11 +26,12 @@ public class PartidaAhorcado implements Runnable {
 
 	private Socket sjug1=null;
 	private Socket sjug2=null;
+	private int nPartida;
 	private String nombreJugador;
 	private int puntos;
 		
 		
-	public PartidaAhorcado(Socket sjug1,Socket sjug2) {
+	public PartidaAhorcado(Socket sjug1,Socket sjug2,int partida) {
 		Random r = new Random();
 		int rol = r.nextInt(2);  //Se recibe un 0 o un 1 de forma aleatoria para asignar los roles.
 		if (rol==0) {
@@ -40,6 +41,7 @@ public class PartidaAhorcado implements Runnable {
 			this.sjug1 = sjug2;
 			this.sjug2 = sjug1;
 		}
+		this.nPartida=partida;
 	}
 	
 	@Override
@@ -132,6 +134,7 @@ public class PartidaAhorcado implements Runnable {
 			}
 			
 		}catch (SocketException e) {
+			System.out.println("Partida "+nPartida+" terminada.");
 		}catch (IOException e) {
 			e.printStackTrace();
 		}finally {
@@ -170,7 +173,7 @@ public class PartidaAhorcado implements Runnable {
 		DocumentBuilder db;
 		try {
 			db = dbf.newDocumentBuilder();
-				Document doc = db.parse(new File("src\\TablaPuntos.xml"));
+				Document doc = db.parse(new File("TablaPuntos.xml"));
 				Element root= doc.getDocumentElement();//Para llegar a la raiz del xml. (Principal)
 				NodeList hijos = root.getElementsByTagName("jugador");
 				boolean encontrado=false;
@@ -217,7 +220,7 @@ public class PartidaAhorcado implements Runnable {
 				TransformerFactory tf = TransformerFactory.newInstance();
 				Transformer transformer = tf.newTransformer();
 				DOMSource source = new DOMSource (doc);
-				StreamResult result = new StreamResult(new File("src\\TablaPuntos.xml"));
+				StreamResult result = new StreamResult(new File("TablaPuntos.xml"));
 				//transformer.setOutputProperty(OutputKeys.INDENT, "yes");//Esta linea y la siguiente para que no se cree todo en una linea.
 				//transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "2");
 				transformer.transform(source, result);

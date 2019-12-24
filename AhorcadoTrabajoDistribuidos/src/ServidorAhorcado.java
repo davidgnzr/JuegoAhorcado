@@ -12,6 +12,7 @@ public class ServidorAhorcado{
 		ExecutorService pool = null;
 		Socket cliente1 = null;
 		Socket cliente2 = null;
+		int partida=1;
 		try {
 			pool = Executors.newCachedThreadPool();
 			ss= new ServerSocket(7765);
@@ -20,8 +21,9 @@ public class ServidorAhorcado{
 				//Esperamos a que dos clientes se conecten al servidor y empieza la partida.
 				cliente1 = ss.accept();
 				cliente2= ss.accept();
-				PartidaAhorcado sa= new PartidaAhorcado(cliente1,cliente2);
+				PartidaAhorcado sa= new PartidaAhorcado(cliente1,cliente2,partida);
 				pool.execute(sa);
+				partida++;
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
