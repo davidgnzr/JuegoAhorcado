@@ -193,16 +193,19 @@ public class SeleccionadorAhorcado extends JFrame{
 				lPalabra.setText(palabra);
 				
 				//Boton para dejar la palabra visible u ocultarla.
-				JButton btnVer = new JButton("Palabra");
-				btnVer.setBounds(505, 90, 85, 20);
+				JButton btnVer = new JButton("<html>Ocultar </br> Palabra</html>");
+				btnVer.setBounds(505, 85, 85, 35);
 				btnVer.setHorizontalAlignment(SwingConstants.CENTER);
 				contentPane.add(btnVer);
+				btnVer.setVisible(true);
 				btnVer.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
 						if(lPalabra.isVisible()) {
 							lPalabra.setVisible(false);
+							btnVer.setText("<html>Mostrar </br> Palabra</html>");
 						}else {
 							lPalabra.setVisible(true);
+							btnVer.setText("<html>Ocultar </br> Palabra</html>");
 						}
 					}
 				});
